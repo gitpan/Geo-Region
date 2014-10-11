@@ -27,7 +27,6 @@
       },
       "runtime" : {
          "requires" : {
-            "Carp" : "0",
             "List::Util" : "1.35",
             "Moo" : "1.001000",
             "Scalar::Util" : "1.10",
@@ -52,10 +51,10 @@
    "provides" : {
       "Geo::Region" : {
          "file" : "lib/Geo/Region.pm",
-         "version" : "0.00_01"
+         "version" : "0.01"
       }
    },
-   "release_status" : "testing",
+   "release_status" : "stable",
    "resources" : {
       "bugtracker" : {
          "web" : "https://github.com/perl-cldr/geo-region-pm5/issues"
@@ -68,5 +67,5 @@
          "url" : "git://github.com/perl-cldr/geo-region-pm5.git"
       }
    },
-   "version" : "0.00_01"
+   "version" : "0.01"
 }

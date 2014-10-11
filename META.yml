@@ -25,9 +25,8 @@ name: Geo-Region
 provides:
   Geo::Region:
     file: lib/Geo/Region.pm
-    version: 0.00_01
+    version: '0.01'
 requires:
-  Carp: '0'
   List::Util: '1.35'
   Moo: '1.001000'
   Scalar::Util: '1.10'
@@ -39,4 +38,4 @@ resources:
   homepage: https://github.com/perl-cldr/geo-region-pm5
   license: http://dev.perl.org/licenses/
   repository: git://github.com/perl-cldr/geo-region-pm5.git
-version: 0.00_01
+version: '0.01'
