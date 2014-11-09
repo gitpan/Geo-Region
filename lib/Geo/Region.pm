@@ -6,7 +6,7 @@ use Scalar::Util qw( looks_like_number weaken );
 use List::Util qw( all any );
 use Moo;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 my %children_of = (
     # regions of subregions
@@ -47,7 +47,8 @@ my %children_of = (
 
 # codes excluded from country list due to being deprecated or grouping container
 my %noncountries = map { $_ => 1 } qw(
-    AN BU CS DD EU FX NT QO QU SU TP YD YU ZR
+    AN BU CS DD FX NT QU SU TP YD YU ZR
+    EU QO
 );
 
 sub coerce_regions {
@@ -58,11 +59,11 @@ sub coerce_regions {
 
 use namespace::clean;
 
-has _regions => (
+has _includes => (
     is       => 'ro',
     coerce   => sub { [ coerce_regions(shift) ] },
     default  => sub { [] },
-    init_arg => 'region',
+    init_arg => 'include',
 );
 
 has _excludes => (
@@ -89,7 +90,7 @@ has _children => (
 
         my %children = map  { $_ => 1 }
                        grep { !exists $excludes{$_} }
-                            $build_children->(@{$self->_regions});
+                            $build_children->(@{$self->_includes});
 
         weaken $build_children;
         return \%children;
@@ -99,7 +100,7 @@ has _children => (
 has _parents => (
     is      => 'lazy',
     builder => sub {
-        my @regions = @{shift->_regions};
+        my @regions = @{shift->_includes};
         my ($build_parents, %count);
 
         $build_parents = sub { map {
@@ -126,6 +127,20 @@ has _countries => (
         keys %{shift->_children}
     ] },
 );
+
+sub BUILDARGS {
+    my ($class, @args) = @_;
+
+    # the `include` key is optional for the first argument
+    my %args = @args % 2 ? (include => @args) : @args;
+
+    # `region` is a deprecated alias for `include`
+    if (exists $args{region}) {
+        $args{include} = delete $args{region};
+    }
+
+    return \%args;
+}
 
 sub contains {
     my ($self, @regions) = @_;
@@ -154,20 +169,20 @@ Geo::Region - Geographical regions and groupings using UN M.49 and CLDR data
 
 =head1 VERSION
 
-This document describes Geo::Region v0.01.
+This document describes Geo::Region v0.02.
 
 =head1 SYNOPSIS
 
     use Geo::Region;
 
     # Americas (019)
-    $amer = Geo::Region->new(region => 19);
+    $amer = Geo::Region->new(19);
 
     # Europe (150), Western Asia (145), and Africa (002)
-    $emea = Geo::Region->new(region => [ 150, 145, 2 ]);
+    $emea = Geo::Region->new([ 150, 145, 2 ]);
 
     # Asia (142) and Oceania (009), excluding Western Asia (145)
-    $apac = Geo::Region->new(region => [ 142, 9 ], exclude => 145);
+    $apac = Geo::Region->new([ 142, 9 ], exclude => 145);
 
     if ( $amer->contains($country) ) {
         # country is in the Americas (US, MX, BR, etc.)
@@ -208,28 +223,33 @@ the CLDR or this class.
 =head2 Constructor
 
 The C<new> class method is used to construct a Geo::Region object along with the
-C<region> argument and optional C<exclude> argument.
+C<include> argument and optional C<exclude> argument.
 
 =over
 
-=item C<region>
+=item C<include>
 
 Accepts either a single region code or an array reference of region or country
-codes, resulting in a custom region.
+codes to be included in the resulting custom region. When passed to the C<new>
+constructor as the first or only argument, the value may be given without the
+C<include> key.
 
-    # countries in the Europen Union
-    Geo::Region->new(region => 'EU')
+    # countries in the European Union
+    Geo::Region->new(include => 'EU')
+    Geo::Region->new('EU')
 
     # countries in Asia plus Russia
-    Geo::Region->new(region => [ 142, 'RU' ])
+    Geo::Region->new(include => [ 142, 'RU' ])
+    Geo::Region->new([ 142, 'RU' ])
 
 =item C<exclude>
 
-Accepts values in the same format as C<region>. This can be used to exclude
+Accepts values in the same format as C<include>. This can be used to exclude
 countries or subregions from a region.
 
     # countries in Europe which are not in the European Union
-    Geo::Region->new(region => 150, exclude => 'EU')
+    Geo::Region->new(include => 150, exclude => 'EU')
+    Geo::Region->new(150, exclude => 'EU')
 
 =back
 

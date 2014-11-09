@@ -5,8 +5,6 @@ author:
 build_requires:
   English: '0'
   Pod::Man: '2.04'
-  Test::Class: '0'
-  Test::Class::Load: '0'
   Test::More: '0.82'
   open: '0'
   parent: '0'
@@ -16,7 +14,7 @@ configure_requires:
   Module::Build: '0.4004'
   Software::License: '0'
 dynamic_config: 1
-generated_by: 'Module::Build version 0.421, CPAN::Meta::Converter version 2.142690'
+generated_by: 'Module::Build version 0.4205, CPAN::Meta::Converter version 2.141520'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -25,7 +23,7 @@ name: Geo-Region
 provides:
   Geo::Region:
     file: lib/Geo/Region.pm
-    version: '0.01'
+    version: '0.02'
 requires:
   List::Util: '1.35'
   Moo: '1.001000'
@@ -38,4 +36,4 @@ resources:
   homepage: https://github.com/perl-cldr/geo-region-pm5
   license: http://dev.perl.org/licenses/
   repository: git://github.com/perl-cldr/geo-region-pm5.git
-version: '0.01'
+version: '0.02'
