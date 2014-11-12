@@ -4,7 +4,7 @@
       "Nick Patch <patch@cpan.org>"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "Module::Build version 0.4205",
+   "generated_by" : "Module::Build version 0.421",
    "license" : [
       "perl_5"
    ],
@@ -49,7 +49,7 @@
    "provides" : {
       "Geo::Region" : {
          "file" : "lib/Geo/Region.pm",
-         "version" : "0.02"
+         "version" : "0.03"
       }
    },
    "release_status" : "stable",
@@ -65,5 +65,5 @@
          "url" : "git://github.com/perl-cldr/geo-region-pm5.git"
       }
    },
-   "version" : "0.02"
+   "version" : "0.03"
 }

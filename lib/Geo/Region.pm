@@ -6,7 +6,7 @@ use Scalar::Util qw( looks_like_number weaken );
 use List::Util qw( all any );
 use Moo;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 my %children_of = (
     # regions of subregions
@@ -16,7 +16,7 @@ my %children_of = (
     '009' => [qw( 053 054 057 061 QO )],
     '019' => [qw( 003 005 013 021 029 419 )],
     '142' => [qw( 030 034 035 143 145 )],
-    '150' => [qw( 039 151 154 155 EU QU )],
+    '150' => [qw( 039 151 154 155 EU )],
     '419' => [qw( 005 013 029 )],
     # regions of countries and territories
     '005' => [qw( AR BO BR CL CO EC FK GF GY PE PY SR UY VE )],
@@ -47,11 +47,18 @@ my %children_of = (
 
 # codes excluded from country list due to being deprecated or grouping container
 my %noncountries = map { $_ => 1 } qw(
-    AN BU CS DD FX NT QU SU TP YD YU ZR
+    AN BU CS DD FX NT SU TP YD YU ZR
     EU QO
 );
 
+# deprecated aliases
+my %alias_of = (
+    UK => 'GB',
+    QU => 'EU',
+);
+
 sub coerce_regions {
+    map  { $alias_of{$_} || $_ }
     map  { looks_like_number $_ ? sprintf('%03d', $_) : uc }
     grep { defined }
     map  { ref eq 'ARRAY' ? @$_ : $_ } @_
@@ -169,7 +176,7 @@ Geo::Region - Geographical regions and groupings using UN M.49 and CLDR data
 
 =head1 VERSION
 
-This document describes Geo::Region v0.02.
+This document describes Geo::Region v0.03, built with Unicode CLDR v26.
 
 =head1 SYNOPSIS
 
@@ -200,8 +207,8 @@ This class is used to create geographical regions and groupings of subregions
 and countries. Default regional groupings are provided using the L<Unicode CLDR
 v26 Territory
 Containment|http://unicode.org/cldr/charts/26/supplemental/territory_containment_un_m_49.html>
-data, which is an extension of the L<United Nations
-M.49|http://unstats.un.org/unsd/methods/m49/m49regin.htm> standard.
+data, which is an extension of the United Nations L<UN
+M.49 (Rev.3)|http://unstats.un.org/unsd/methods/m49/m49regin.htm> standard.
 
 =head2 Regions
 
@@ -217,8 +224,9 @@ European Union and B<QO> for Outlying Oceania.
 
 Countries and territories are represented with ISO 3166-1 alpha-2 country codes,
 such as B<JP> for Japan and B<AQ> for Antarctica, and are case insensitive.
-Unlike with region codes, the three-digit forms of country codes are not used by
-the CLDR or this class.
+Unlike with region codes, the three-digit forms of country codes are not
+currently supported, nor are three-letter codes. The deprecated code B<UK> for
+the United Kingdom is supported as an alias of the official code B<GB>.
 
 =head2 Constructor
 

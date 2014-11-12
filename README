@@ -3,7 +3,7 @@ NAME
     data
 
 VERSION
-    This document describes Geo::Region v0.02.
+    This document describes Geo::Region v0.03, built with Unicode CLDR v26.
 
 SYNOPSIS
         use Geo::Region;
@@ -31,7 +31,7 @@ DESCRIPTION
     This class is used to create geographical regions and groupings of
     subregions and countries. Default regional groupings are provided using
     the Unicode CLDR v26 Territory Containment data, which is an extension
-    of the United Nations M.49 standard.
+    of the United Nations UN M.49 (Rev.3) standard.
 
   Regions
     Regions and subregions are represented with UN M.49 region codes, such
@@ -47,7 +47,9 @@ DESCRIPTION
     Countries and territories are represented with ISO 3166-1 alpha-2
     country codes, such as JP for Japan and AQ for Antarctica, and are case
     insensitive. Unlike with region codes, the three-digit forms of country
-    codes are not used by the CLDR or this class.
+    codes are not currently supported, nor are three-letter codes. The
+    deprecated code UK for the United Kingdom is supported as an alias of
+    the official code GB.
 
   Constructor
     The `new' class method is used to construct a Geo::Region object along
