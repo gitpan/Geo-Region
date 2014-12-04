@@ -3,7 +3,7 @@ NAME
     data
 
 VERSION
-    This document describes Geo::Region v0.03, built with Unicode CLDR v26.
+    This document describes Geo::Region v0.04, built with Unicode CLDR v26.
 
 SYNOPSIS
         use Geo::Region;

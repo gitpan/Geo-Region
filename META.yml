@@ -5,7 +5,7 @@ author:
 build_requires:
   English: '0'
   Pod::Man: '2.04'
-  Test::More: '0.82'
+  Test::Most: '0.22'
   open: '0'
   parent: '0'
   strict: '0'
@@ -23,8 +23,9 @@ name: Geo-Region
 provides:
   Geo::Region:
     file: lib/Geo/Region.pm
-    version: '0.03'
+    version: '0.04'
 requires:
+  Carp: '0'
   List::Util: '1.35'
   Moo: '1.001000'
   Scalar::Util: '1.10'
@@ -32,8 +33,8 @@ requires:
   perl: v5.8.1
   utf8: '0'
 resources:
-  bugtracker: https://github.com/perl-cldr/geo-region-pm5/issues
-  homepage: https://github.com/perl-cldr/geo-region-pm5
+  bugtracker: https://github.com/patch/geo-region-pm5/issues
+  homepage: https://github.com/patch/geo-region-pm5
   license: http://dev.perl.org/licenses/
-  repository: git://github.com/perl-cldr/geo-region-pm5.git
-version: '0.03'
+  repository: git://github.com/patch/geo-region-pm5.git
+version: '0.04'

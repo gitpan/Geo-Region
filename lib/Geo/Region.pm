@@ -2,11 +2,12 @@ package Geo::Region;
 
 use v5.8.1;
 use utf8;
+use Carp qw( carp );
 use Scalar::Util qw( looks_like_number weaken );
 use List::Util qw( all any );
 use Moo;
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 my %children_of = (
     # regions of subregions
@@ -141,8 +142,8 @@ sub BUILDARGS {
     # the `include` key is optional for the first argument
     my %args = @args % 2 ? (include => @args) : @args;
 
-    # `region` is a deprecated alias for `include`
     if (exists $args{region}) {
+        carp 'Argument "region" is deprecated; use "include" instead';
         $args{include} = delete $args{region};
     }
 
@@ -176,7 +177,7 @@ Geo::Region - Geographical regions and groupings using UN M.49 and CLDR data
 
 =head1 VERSION
 
-This document describes Geo::Region v0.03, built with Unicode CLDR v26.
+This document describes Geo::Region v0.04, built with Unicode CLDR v26.
 
 =head1 SYNOPSIS
 

@@ -19,21 +19,22 @@ my $builder = Module::Build->new(
         'strict'            => 0,
         'warnings'          => 0,
         'English'           => 0,
-        'Test::More'        => '0.82',
+        'Test::Most'        => '0.22',
     },
     requires => {
         'perl'             => '5.8.1',
         'namespace::clean' => 0,
         'utf8'             => 0,
+        'Carp'             => 0,
         'List::Util'       => '1.35',
         'Moo'              => '1.001000',
         'Scalar::Util'     => '1.10',
     },
     meta_merge => {
         resources => {
-            repository => 'git://github.com/perl-cldr/geo-region-pm5.git',
-            homepage   => 'https://github.com/perl-cldr/geo-region-pm5',
-            bugtracker => 'https://github.com/perl-cldr/geo-region-pm5/issues',
+            repository => 'git://github.com/patch/geo-region-pm5.git',
+            homepage   => 'https://github.com/patch/geo-region-pm5',
+            bugtracker => 'https://github.com/patch/geo-region-pm5/issues',
         },
     },
 );

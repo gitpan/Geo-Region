@@ -27,6 +27,7 @@
       },
       "runtime" : {
          "requires" : {
+            "Carp" : "0",
             "List::Util" : "1.35",
             "Moo" : "1.001000",
             "Scalar::Util" : "1.10",
@@ -38,7 +39,7 @@
       "test" : {
          "requires" : {
             "English" : "0",
-            "Test::More" : "0.82",
+            "Test::Most" : "0.22",
             "open" : "0",
             "parent" : "0",
             "strict" : "0",
@@ -49,21 +50,21 @@
    "provides" : {
       "Geo::Region" : {
          "file" : "lib/Geo/Region.pm",
-         "version" : "0.03"
+         "version" : "0.04"
       }
    },
    "release_status" : "stable",
    "resources" : {
       "bugtracker" : {
-         "web" : "https://github.com/perl-cldr/geo-region-pm5/issues"
+         "web" : "https://github.com/patch/geo-region-pm5/issues"
       },
-      "homepage" : "https://github.com/perl-cldr/geo-region-pm5",
+      "homepage" : "https://github.com/patch/geo-region-pm5",
       "license" : [
          "http://dev.perl.org/licenses/"
       ],
       "repository" : {
-         "url" : "git://github.com/perl-cldr/geo-region-pm5.git"
+         "url" : "git://github.com/patch/geo-region-pm5.git"
       }
    },
-   "version" : "0.03"
+   "version" : "0.04"
 }
