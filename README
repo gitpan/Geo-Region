@@ -3,7 +3,7 @@ NAME
     data
 
 VERSION
-    This document describes Geo::Region v0.05, built with Unicode CLDR v26.
+    This document describes Geo::Region v0.06, built with Unicode CLDR v26.
 
 SYNOPSIS
         use Geo::Region;
@@ -63,8 +63,8 @@ DESCRIPTION
             Geo::Region->new( EUROPEAN_UNION )
 
             # countries in Asia (142) plus Russia (RU)
-            Geo::Region->new( include => [ ASIA, 'RU' ])
-            Geo::Region->new([ ASIA, 'RU' ])
+            Geo::Region->new( include => [ ASIA, RUSSIA ])
+            Geo::Region->new([ ASIA, RUSSIA ])
 
     `exclude'
         Accepts values in the same format as `include'. This can be used to
@@ -94,10 +94,11 @@ DESCRIPTION
             for ( $region->countries ) {
 
 SEE ALSO
-    Geo::Region::Constant: Constants for UN M.49 and CLDR region codes
+    Geo::Region::Constant — Constants for UN M.49 and CLDR region codes
     Unicode CLDR: UN M.49 Territory Containment
     United Nations: UN M.49 Standard Country, Area, & Region Codes
     Locale::CLDR: Territory Containment
+    Geo::Region for Perl 6
 
 AUTHOR
     Nick Patch <patch@cpan.org>
@@ -111,4 +112,7 @@ COPYRIGHT AND LICENSE
 
     This library is free software; you can redistribute it and/or modify it
     under the same terms as Perl itself.
+
+    Unicode is a registered trademark of Unicode, Inc., in the United States
+    and other countries.
 

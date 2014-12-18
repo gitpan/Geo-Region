@@ -1,6 +1,6 @@
 use utf8;
 use open qw( :encoding(UTF-8) :std );
-use Test::Most tests => 10;
+use Test::Most tests => 11;
 use Geo::Region;
 
 subtest 'default empty region' => sub {
@@ -19,9 +19,16 @@ subtest 'explicit empty region' => sub {
     is_deeply [$r->countries],   [], 'no countries';
 };
 
-subtest 'single argument instantiation' => sub {
+subtest 'single-argument constructor' => sub {
     plan tests => 1;
     my $r = Geo::Region->new(53);
+
+    is_deeply [$r->countries], [qw( AU NF NZ )], 'expected countries';
+};
+
+subtest 'hashref constructor' => sub {
+    plan tests => 1;
+    my $r = Geo::Region->new({ include => 53 });
 
     is_deeply [$r->countries], [qw( AU NF NZ )], 'expected countries';
 };
@@ -37,7 +44,7 @@ subtest 'deprecated region param' => sub {
 };
 
 subtest 'World (001) superregion' => sub {
-    plan tests => 44;
+    plan tests => 42;
     my $r = Geo::Region->new(include => 1);
 
     ok $r->is_within(1),    'region is within itself';
@@ -47,11 +54,9 @@ subtest 'World (001) superregion' => sub {
     ok $r->contains('011'), 'region contains subsubregion string';
     ok $r->contains('BF'),  'region contains country';
     ok $r->contains('bf'),  'region contains lowercase country';
-    ok $r->contains( 1, 2, 11, 'BF' ), 'multiple containment args';
-    ok $r->contains([1, 2, 11, 'BF']), 'arrayreg containment arg';
 
     my @countries = $r->countries;
-    is         @countries,  256,               'has expected # of countries';
+    is         @countries,  256,               'expected # of countries';
     like      "@countries", qr/^[A-Z ]+$/,     'countries are uppercase';
     is_deeply \@countries,  [sort @countries], 'countries are sorted';
 
@@ -69,7 +74,7 @@ subtest 'World (001) superregion' => sub {
 };
 
 subtest 'Mexico (MX) country' => sub {
-    plan tests => 12;
+    plan tests => 10;
     my $r = Geo::Region->new(include => 'MX');
 
     ok $r->contains('MX'),  'country contains itself';
@@ -81,20 +86,19 @@ subtest 'Mexico (MX) country' => sub {
     ok $r->is_within(1),    'within World (001) region';
     ok $r->is_within(3),    'within North America (003) grouping';
     ok $r->is_within(419),  'within Latin America (419) grouping';
-    ok $r->is_within( 1, 3, 13, 19, 419, 'MX' ), 'multiple within args';
-    ok $r->is_within([1, 3, 13, 19, 419, 'MX']), 'arrayref within arg';
     is_deeply [$r->countries], ['MX'], 'only one country in a country';
 };
 
 subtest 'Central Asia (143) + Russia (RU)' => sub {
-    plan tests => 6;
+    plan tests => 7;
     my $r = Geo::Region->new(include => [143, 'RU']);
 
-    ok $r->contains(143, 'RU'), 'contains both included regions';
-    ok $r->contains('KZ'),      'contains regions within any included';
-    ok $r->is_within(1),        'within regions shared by all included';
-    ok !$r->is_within(143),     'not within either included region';
-    ok !$r->is_within('RU'),    'not within either included region';
+    ok $r->contains(143),    'contains included region';
+    ok $r->contains('RU'),   'contains included country';
+    ok $r->contains('KZ'),   'contains country within any included region';
+    ok $r->is_within(1),     'within regions shared by all included';
+    ok !$r->is_within(143),  'not within either included region';
+    ok !$r->is_within('RU'), 'not within either included region';
 
     is_deeply(
         [$r->countries],
@@ -112,11 +116,10 @@ subtest 'Europe (150) − European Union (EU)' => sub {
     ok !$r->contains('EU'), '!contains excluded region';
     ok !$r->contains('FR'), '!contains countries within excluded region';
 
-    is_deeply(
-        [$r->countries],
-        [qw( AD AL AX BA BY CH FO GG GI IM IS JE LI MC MD ME MK NO RS RU SJ SM UA VA XK )],
-        'return all countries within included except excluded'
-    );
+    is_deeply [$r->countries], [qw(
+        AD AL AX BA BY CH FO GG GI IM IS JE LI
+        MC MD ME MK NO RS RU SJ SM UA VA XK
+    )], 'return all countries within included except excluded';
 };
 
 subtest 'deprecated alias QU for EU' => sub {

@@ -7,7 +7,7 @@ use Scalar::Util qw( looks_like_number weaken );
 use List::Util qw( all any );
 use Moo;
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 my %children_of = (
     # regions of subregions
@@ -54,29 +54,41 @@ my %noncountries = map { $_ => 1 } qw(
 
 # deprecated aliases
 my %alias_of = (
-    UK => 'GB',
     QU => 'EU',
+    UK => 'GB',
 );
 
+sub coerce_region {
+    my ($region) = @_;
+
+    return sprintf('%03d', $region)
+        if looks_like_number $region;
+
+    return $alias_of{uc $region}
+        || uc $region;
+}
+
 sub coerce_regions {
-    map  { $alias_of{$_} || $_ }
-    map  { looks_like_number $_ ? sprintf('%03d', $_) : uc }
-    grep { defined }
-    map  { ref eq 'ARRAY' ? @$_ : $_ } @_
+    my ($regions) = @_;
+
+    return [
+        map { coerce_region($_) }
+        ref $regions eq 'ARRAY' ? @$regions : $regions
+    ];
 }
 
 use namespace::clean;
 
 has _includes => (
     is       => 'ro',
-    coerce   => sub { [ coerce_regions(shift) ] },
+    coerce   => sub { coerce_regions(shift) },
     default  => sub { [] },
     init_arg => 'include',
 );
 
 has _excludes => (
     is       => 'ro',
-    coerce   => sub { [ coerce_regions(shift) ] },
+    coerce   => sub { coerce_regions(shift) },
     default  => sub { [] },
     init_arg => 'exclude',
 );
@@ -140,7 +152,9 @@ sub BUILDARGS {
     my ($class, @args) = @_;
 
     # the `include` key is optional for the first argument
-    my %args = @args % 2 ? (include => @args) : @args;
+    my %args = @args == 1 && ref $args[0] eq 'HASH' ? %{$args[0]}        :
+               @args % 2                            ? (include => @args) :
+                                                      @args              ;
 
     if (exists $args{region}) {
         carp 'Argument "region" is deprecated; use "include" instead';
@@ -151,13 +165,13 @@ sub BUILDARGS {
 }
 
 sub contains {
-    my ($self, @regions) = @_;
-    return all { exists $self->_children->{$_} } coerce_regions(@regions);
+    my ($self, $region) = @_;
+    return exists $self->_children->{ coerce_region($region) };
 }
 
 sub is_within {
-    my ($self, @regions) = @_;
-    return all { exists $self->_parents->{$_} } coerce_regions(@regions);
+    my ($self, $region) = @_;
+    return exists $self->_parents->{ coerce_region($region) };
 }
 
 sub countries {
@@ -177,7 +191,7 @@ Geo::Region - Geographical regions and groupings using UN M.49 and CLDR data
 
 =head1 VERSION
 
-This document describes Geo::Region v0.05, built with Unicode CLDR v26.
+This document describes Geo::Region v0.06, built with Unicode CLDR v26.
 
 =head1 SYNOPSIS
 
@@ -245,8 +259,8 @@ C<include> key.
     Geo::Region->new( EUROPEAN_UNION )
 
     # countries in Asia (142) plus Russia (RU)
-    Geo::Region->new( include => [ ASIA, 'RU' ])
-    Geo::Region->new([ ASIA, 'RU' ])
+    Geo::Region->new( include => [ ASIA, RUSSIA ])
+    Geo::Region->new([ ASIA, RUSSIA ])
 
 =item C<exclude>
 
@@ -290,7 +304,7 @@ by the Geo::Region instance.
 
 =over
 
-=item L<Geo::Region::Constant>: Constants for UN M.49 and CLDR region codes
+=item L<Geo::Region::Constant> — Constants for UN M.49 and CLDR region codes
 
 =item L<Unicode CLDR: UN M.49 Territory
 Containment|http://unicode.org/cldr/charts/26/supplemental/territory_containment_un_m_49.html>
@@ -299,6 +313,8 @@ Containment|http://unicode.org/cldr/charts/26/supplemental/territory_containment
 Codes|http://unstats.un.org/unsd/methods/m49/m49regin.htm>
 
 =item L<Locale::CLDR: Territory Containment|Locale::CLDR/Territory-Containment>
+
+=item L<Geo::Region|https://github.com/patch/geo-region-pm6> for Perl 6
 
 =back
 
@@ -317,3 +333,6 @@ L<code.shutterstock.com|http://code.shutterstock.com/>.
 
 This library is free software; you can redistribute it and/or modify it under
 the same terms as Perl itself.
+
+Unicode is a registered trademark of Unicode, Inc., in the United States and
+other countries.

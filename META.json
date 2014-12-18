@@ -51,11 +51,11 @@
    "provides" : {
       "Geo::Region" : {
          "file" : "lib/Geo/Region.pm",
-         "version" : "0.05"
+         "version" : "0.06"
       },
       "Geo::Region::Constant" : {
          "file" : "lib/Geo/Region/Constant.pm",
-         "version" : "0.05"
+         "version" : "0.06"
       }
    },
    "release_status" : "stable",
@@ -71,5 +71,5 @@
          "url" : "git://github.com/patch/geo-region-pm5.git"
       }
    },
-   "version" : "0.05"
+   "version" : "0.06"
 }

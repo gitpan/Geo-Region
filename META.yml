@@ -20,10 +20,10 @@ name: Geo-Region
 provides:
   Geo::Region:
     file: lib/Geo/Region.pm
-    version: '0.05'
+    version: '0.06'
   Geo::Region::Constant:
     file: lib/Geo/Region/Constant.pm
-    version: '0.05'
+    version: '0.06'
 requires:
   Carp: '0'
   Exporter: '0'
@@ -41,4 +41,4 @@ resources:
   homepage: https://github.com/patch/geo-region-pm5
   license: http://dev.perl.org/licenses/
   repository: git://github.com/patch/geo-region-pm5.git
-version: '0.05'
+version: '0.06'
